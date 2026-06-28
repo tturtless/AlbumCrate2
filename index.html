@@ -17,12 +17,12 @@
   body{background:var(--bg);color:var(--cream);font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;min-height:100vh}
 
   /* HEADER */
-  .site-header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
-  .logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--gold);letter-spacing:.04em;white-space:nowrap;flex-shrink:0}
+  .site-header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:10px;height:56px}
+  .logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--gold);letter-spacing:.04em;white-space:nowrap;flex-shrink:0}
   .logo span{color:var(--cream-dim);font-style:italic;font-weight:400;font-size:13px;margin-left:8px;letter-spacing:.08em}
   .header-search{flex:1;max-width:380px;position:relative}
-  .site-header-row1{display:contents} /* on desktop, children flow directly into the header flex row */
-  .header-search input{-webkit-appearance:none;appearance:none;width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--cream);font-family:'Inter',sans-serif;font-size:13px;padding:8px 36px 8px 14px;outline:none;transition:border-color .2s}
+  .site-header-row1{display:contents}
+  .header-search input{-webkit-appearance:none;appearance:none;width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--cream);font-family:'Inter',sans-serif;font-size:16px;padding:8px 36px 8px 14px;outline:none;transition:border-color .2s}
   .header-search input::-webkit-search-decoration,.header-search input::-webkit-search-cancel-button,.header-search input::-webkit-search-results-button,.header-search input::-webkit-search-results-decoration{display:none}
   .header-search input::placeholder{color:var(--cream-dim)}
   .header-search input:focus{border-color:var(--gold-dim)}
@@ -38,7 +38,7 @@
   .spin-btn:hover{background:#DFB95C;transform:translateY(-1px)}
 
   /* FILTER BAR */
-  .filter-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .filter-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .filter-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--cream-dim);flex-shrink:0}
   .filter-select{background:var(--bg);border:1px solid var(--border);border-radius:3px;color:var(--cream);font-family:'Inter',sans-serif;font-size:12px;padding:6px 28px 6px 10px;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239A9080'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;cursor:pointer;transition:border-color .2s;flex-shrink:0}
   .filter-select:focus{border-color:var(--gold-dim)}
@@ -51,7 +51,7 @@
   .sort-btn:not(.active):hover{background:var(--surface2);color:var(--cream)}
 
   /* RESULTS */
-  .results-info{padding:12px 24px 4px;font-size:11px;color:var(--cream-dim);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  .results-info{padding:10px 16px 4px;font-size:11px;color:var(--cream-dim);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
   .results-info strong{color:var(--gold);font-family:'Courier Prime',monospace;font-size:13px}
   .refresh-btn{background:none;border:1px solid var(--border);border-radius:3px;color:var(--cream-dim);font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.06em;padding:4px 12px;cursor:pointer;transition:border-color .2s,color .2s;white-space:nowrap}
   .refresh-btn:hover:not(:disabled){border-color:var(--gold-dim);color:var(--gold)}
@@ -59,6 +59,37 @@
 
   /* GRID */
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;padding:16px 24px 48px}
+
+  /* ── MOBILE ── */
+  @media(max-width:600px){
+    /* Header: two rows on mobile */
+    .site-header{height:auto;flex-wrap:wrap;padding:10px 12px;gap:8px;row-gap:8px}
+    .logo{font-size:18px}
+    .logo span{display:none}
+    .header-search{order:3;flex:1 1 100%;max-width:100%}
+    .header-search input{font-size:16px} /* prevents iOS zoom */
+    .header-actions{order:2;gap:6px}
+    .want-list-btn,.stats-btn,.add-album-btn,.spin-btn{font-size:11px;padding:7px 9px;gap:4px}
+    /* hide button labels, keep emoji/icon */
+    .want-list-btn .btn-label,.stats-btn .btn-label,.add-album-btn .btn-label{display:none}
+
+    /* Filter bar */
+    .filter-bar{padding:8px 12px;gap:6px}
+    .filter-select{font-size:13px;padding:7px 24px 7px 9px}
+    .fav-filter-btn{font-size:13px;padding:7px 10px}
+    .sort-group{width:100%;margin-left:0}
+    .sort-btn{flex:1;text-align:center;padding:7px 6px;font-size:10px}
+
+    /* Grid: 2 compact columns */
+    .grid{grid-template-columns:repeat(2,1fr);gap:10px;padding:10px 12px 60px}
+    .card-body{padding:8px 9px 10px}
+    .card-artist{font-size:9px}
+    .card-title{font-size:12px}
+    .card-meta{font-size:10px}
+
+    /* Results bar */
+    .results-info{padding:8px 12px 4px}
+  }
   .card{background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:visible;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;position:relative}
   .card:hover{transform:translateY(-4px);border-color:var(--gold-dim);box-shadow:0 12px 32px rgba(0,0,0,.6);z-index:2}
   .card-art{width:100%;aspect-ratio:1;position:relative;overflow:hidden;background:var(--groove);border-radius:3px 3px 0 0}
@@ -367,10 +398,10 @@
     <span class="search-icon">⌕</span>
   </div>
   <div class="header-actions">
-    <button class="stats-btn" id="statsBtn"><span>📊</span><span>Crate Diggin'</span></button>
-    <button class="want-list-btn" id="wantListBtn"><span>🎯</span><span>Wish List</span></button>
-    <button class="add-album-btn" id="addAlbumBtn"><span style="font-size:16px;line-height:1">＋</span><span>Add to Crate</span></button>
-    <button class="spin-btn" id="spinBtn">🎲 Spin</button>
+    <button class="stats-btn" id="statsBtn"><span>📊</span><span class="btn-label">Crate Diggin'</span></button>
+    <button class="want-list-btn" id="wantListBtn"><span>🎯</span><span class="btn-label">Wish List</span></button>
+    <button class="add-album-btn" id="addAlbumBtn"><span style="font-size:16px;line-height:1">＋</span><span class="btn-label">Add to Crate</span></button>
+    <button class="spin-btn" id="spinBtn">🎲 <span class="btn-label">Spin</span></button>
   </div>
 </header>
 
