@@ -61,7 +61,10 @@
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;padding:16px 24px 48px}
 
   /* ── MOBILE ── */
+  /* Prevent iOS auto-zoom on focus — all interactive inputs must be ≥16px */
   @media(max-width:600px){
+    input,textarea,select{font-size:16px !important}
+
     /* Header: two rows on mobile */
     .site-header{height:auto;flex-wrap:wrap;padding:10px 12px;gap:8px;row-gap:8px}
     .logo{font-size:18px}
