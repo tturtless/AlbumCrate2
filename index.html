@@ -317,40 +317,29 @@
   /* ANIMATIONS */
   @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
-  /* iOS INPUT ZOOM FIX — any input/select/textarea under 16px triggers Safari auto-zoom */
+  /* iOS INPUT ZOOM FIX — Safari auto-zooms any input with font-size < 16px */
   input, select, textarea { font-size: 16px !important; }
-  /* Prevent double-tap zoom on buttons/interactive elements */
+  /* Kill double-tap zoom delay on all interactive elements */
   button, a, select, input, textarea { touch-action: manipulation; }
 
   /* RESPONSIVE */
   @media(max-width:620px){
-    /* Header: two-row layout on mobile */
-    .site-header{
-      height:auto;
-      flex-direction:column;
-      align-items:stretch;
-      padding:10px 12px 8px;
-      gap:8px;
-    }
-    .site-header-row1{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%}
-    .logo{font-size:18px;flex-shrink:0}
+    /* Header — single row, scaled to fit iPhone */
+    .site-header{height:52px;padding:0 8px;gap:6px}
+    .logo{font-size:15px;letter-spacing:.02em;flex-shrink:0}
     .logo span{display:none}
-    .header-actions{display:flex;align-items:center;gap:5px;flex-shrink:0}
-    .stats-btn span:last-child,.want-list-btn span:last-child{display:none}
-    .stats-btn,.want-list-btn{padding:7px 9px;font-size:13px;gap:0}
-    .add-album-btn{padding:7px 10px;font-size:12px;gap:4px}
-    .add-album-btn span:last-child{font-size:12px}
-    .spin-btn{padding:7px 10px;font-size:12px}
-    /* Search bar sits in its own full-width row */
-    .header-search{max-width:100%;flex:1}
-    .header-search input{font-size:16px !important;padding:8px 36px 8px 12px}
+    .header-search{flex:1;min-width:0;max-width:none}
+    .header-search input{padding:7px 28px 7px 10px}
+    .header-actions{gap:4px;flex-shrink:0}
+    .stats-btn,.want-list-btn,.add-album-btn,.spin-btn{padding:6px 8px;font-size:11px;gap:3px;letter-spacing:0}
+    .stats-btn span:first-child,.want-list-btn span:first-child{font-size:11px}
     /* Filter bar */
-    .filter-bar{padding:7px 10px;gap:5px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .filter-bar{padding:6px 8px;gap:5px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
     .filter-label{display:none}
-    .filter-select{font-size:16px !important;padding:6px 24px 6px 8px}
-    .fav-filter-btn{font-size:13px;padding:6px 10px}
+    .filter-select{padding:5px 22px 5px 8px}
+    .fav-filter-btn{padding:5px 10px}
     .sort-group{margin-left:auto;flex-shrink:0}
-    .sort-btn{font-size:11px;padding:6px 10px}
+    .sort-btn{padding:5px 8px;font-size:10px}
     /* 3-column grid */
     .grid{padding:8px 8px 48px;gap:7px;grid-template-columns:repeat(3,1fr)}
     .card-body{padding:6px 7px 8px}
@@ -372,18 +361,16 @@
 
 <!-- HEADER -->
 <header class="site-header">
-  <div class="site-header-row1">
-    <div class="logo" id="logoBtn" style="cursor:pointer" title="Back to top">THE CRATE <span>Vinyl Collection</span></div>
-    <div class="header-actions">
-      <button class="stats-btn" id="statsBtn"><span>📊</span><span>Crate Diggin'</span></button>
-      <button class="want-list-btn" id="wantListBtn"><span>🎯</span><span>Wish List</span></button>
-      <button class="add-album-btn" id="addAlbumBtn"><span style="font-size:16px;line-height:1">＋</span><span>Add to Crate</span></button>
-      <button class="spin-btn" id="spinBtn">🎲 Spin</button>
-    </div>
-  </div>
+  <div class="logo" id="logoBtn" style="cursor:pointer" title="Back to top">THE CRATE <span>Vinyl Collection</span></div>
   <div class="header-search">
     <input type="search" id="searchInput" placeholder="Search artist or title…" autocomplete="off">
     <span class="search-icon">⌕</span>
+  </div>
+  <div class="header-actions">
+    <button class="stats-btn" id="statsBtn"><span>📊</span><span>Crate Diggin'</span></button>
+    <button class="want-list-btn" id="wantListBtn"><span>🎯</span><span>Wish List</span></button>
+    <button class="add-album-btn" id="addAlbumBtn"><span style="font-size:16px;line-height:1">＋</span><span>Add to Crate</span></button>
+    <button class="spin-btn" id="spinBtn">🎲 Spin</button>
   </div>
 </header>
 
