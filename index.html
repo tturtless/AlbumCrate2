@@ -320,8 +320,9 @@
     .site-header{gap:8px;padding:0 12px}
     .logo span{display:none}
     .spin-btn{padding:8px 10px;font-size:11px}
-    .add-album-btn span:last-child,.want-list-btn span:last-child{display:none}
-    .add-album-btn,.want-list-btn{padding:8px 10px}
+    .header-actions{gap:6px}
+    .want-list-btn,.stats-btn,.add-album-btn{padding:7px 9px;font-size:11px;gap:4px}
+    .stats-btn span:last-child{display:none}
     .filter-bar{padding:10px 12px}
     .grid{padding:12px 12px 48px;gap:12px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
     .detail-modal-header{grid-template-columns:1fr}
@@ -599,7 +600,32 @@ let caaCache=lsGet(CAA_KEY,{});
 Object.keys(caaCache).forEach(k=>{if(!caaCache[k])delete caaCache[k]});
 function saveCaaCache(){lsSet(CAA_KEY,caaCache)}
 
+// ── COVER SEARCH OVERRIDES ──
+// Some albums need a hand-tuned iTunes search term to find the right cover
+// (self-titled records, compilations, or names iTunes catalogs differently).
+const COVER_QUERY_OVERRIDES = {
+  "moses jones|blackbird":"Moses Jones Blackbird",
+  "electric light orchestra|olé elo":"Ole ELO Electric Light Orchestra",
+  "elvis presley|double dynamite":"Elvis Presley Double Dynamite",
+  "elvis presley|elvis the legend lives on":"Elvis Presley The Legend Lives On",
+  "foreigner|foreigner":"Foreigner Foreigner 1977",
+  "grand funk railroad|shine on":"Grand Funk Railroad Shine On",
+  "green day|american idiot":"Green Day American Idiot",
+  "jimi hendrix|high, live 'n' dirty":"Jimi Hendrix High Live N Dirty",
+  "jimi hendrix|smash hits":"Jimi Hendrix Smash Hits",
+  "john cougar mellencamp|uh-huh":"John Cougar Mellencamp Uh-Huh",
+  "lynyrd skynyrd|give me back my bullets":"Lynyrd Skynyrd Give Me Back My Bullets",
+  "pearl jam|ten":"Pearl Jam Ten",
+  "pink floyd|animals":"Pink Floyd Animals",
+  "pink floyd|the dark side of the moon":"Pink Floyd Dark Side of the Moon",
+  "the babys|union jacks":"The Babys Union Jacks",
+  "the cars|the cars":"The Cars The Cars 1978",
+  "the doors|13":"The Doors 13"
+};
+
 function buildSearchStrategies(artist,title){
+  const overrideKey=(artist+"|"+title).toLowerCase().trim();
+  if(COVER_QUERY_OVERRIDES[overrideKey])return[encodeURIComponent(COVER_QUERY_OVERRIDES[overrideKey])];
   const clean=s=>s.replace(/\([^)]*\)/g,"").replace(/\[[^\]]*\]/g,"").replace(/soundtrack/ig,"").replace(/greatest hits.*$/ig,"greatest hits").replace(/self[- ]titled/ig,"").replace(/vol\.?\s*\d+/ig,"").replace(/[^\w\s&]/g," ").replace(/\s+/g," ").trim();
   const ca=clean(artist.replace(/various artists/ig,"").replace(/^the\s+/i,"").trim());
   const ct=clean(title);
@@ -838,7 +864,7 @@ let vinylCollection=[
   {id:7,artist:"Bad Company",title:"Run with the Pack",year:1976,genre:"Classic Rock",shelf:"A",condition:cond(6)},
   {id:8,artist:"Billy Idol",title:"Rebel Yell",year:1983,genre:"New Wave",shelf:"A",condition:cond(0)},
   {id:9,artist:"Black Sabbath",title:"Paranoid",year:1970,genre:"Heavy Metal",shelf:"A",condition:cond(1)},
-  {id:10,artist:"Blackbird",title:"Moses Jones",year:1975,genre:"Classic Rock",shelf:"A",condition:cond(2)},
+  {id:10,artist:"Moses Jones",title:"Blackbird",year:1975,genre:"Classic Rock",shelf:"A",condition:cond(2)},
   {id:11,artist:"Bob Seger & the Silver Bullet Band",title:"Against the Wind",year:1980,genre:"Classic Rock",shelf:"A",condition:cond(3)},
   {id:12,artist:"Bob Seger & the Silver Bullet Band",title:"Night Moves",year:1976,genre:"Classic Rock",shelf:"A",condition:cond(4)},
   {id:13,artist:"Boston",title:"Boston",year:1976,genre:"Classic Rock",shelf:"B",condition:cond(5)},
@@ -863,7 +889,7 @@ let vinylCollection=[
   {id:32,artist:"Eddie and the Cruisers",title:"Soundtrack",year:1983,genre:"Soundtrack",shelf:"F",condition:cond(3)},
   {id:33,artist:"Eddie and the Cruisers",title:"Soundtrack (Alt Press)",year:1983,genre:"Soundtrack",shelf:"F",condition:cond(4)},
   {id:34,artist:"Electric Light Orchestra",title:"Greatest Hits",year:1979,genre:"Classic Rock",shelf:"C",condition:cond(5)},
-  {id:35,artist:"Electric Light Orchestra",title:"OLELO",year:1981,genre:"Classic Rock",shelf:"C",condition:cond(6)},
+  {id:35,artist:"Electric Light Orchestra",title:"Olé ELO",year:1981,genre:"Classic Rock",shelf:"C",condition:cond(6)},
   {id:36,artist:"Elvis Presley",title:"Double Dynamite",year:1975,genre:"Classic Rock",shelf:"C",condition:cond(0)},
   {id:37,artist:"Elvis Presley",title:"Elvis The Legend Lives On",year:1975,genre:"Classic Rock",shelf:"C",condition:cond(1)},
   {id:38,artist:"Elvis Presley",title:"Gold Records Volume 5",year:1984,genre:"Classic Rock",shelf:"C",condition:cond(2)},
@@ -883,14 +909,14 @@ let vinylCollection=[
   {id:52,artist:"Gordon Lightfoot",title:"If You Could Read My Mind",year:1970,genre:"Singer-Songwriter",shelf:"D",condition:cond(2)},
   {id:53,artist:"Gordon Lightfoot",title:"Old Dan's Records",year:1972,genre:"Singer-Songwriter",shelf:"D",condition:cond(3)},
   {id:54,artist:"Gordon Lightfoot",title:"Sundown",year:1974,genre:"Singer-Songwriter",shelf:"D",condition:cond(4)},
-  {id:55,artist:"Grand Funk",title:"Shine On",year:1974,genre:"Classic Rock",shelf:"D",condition:cond(5)},
+  {id:55,artist:"Grand Funk Railroad",title:"Shine On",year:1974,genre:"Classic Rock",shelf:"D",condition:cond(5)},
   {id:56,artist:"Green Day",title:"American Idiot",year:2004,genre:"Punk / Alternative",shelf:"D",condition:cond(6)},
   {id:57,artist:"Gregory Alan Isakov",title:"The Weatherman",year:2013,genre:"Singer-Songwriter",shelf:"D",condition:cond(0)},
   {id:58,artist:"Hanoi Rocks",title:"Self-Destruction Blues",year:1982,genre:"Hard Rock",shelf:"D",condition:cond(1)},
   {id:59,artist:"Heart",title:"Dreamboat Annie",year:1975,genre:"Classic Rock",shelf:"D",condition:cond(2)},
   {id:60,artist:"Heart",title:"Little Queen",year:1977,genre:"Classic Rock",shelf:"D",condition:cond(3)},
   {id:61,artist:"Iron Butterfly",title:"In-A-Gadda-Da-Vida",year:1968,genre:"Classic Rock",shelf:"E",condition:cond(4)},
-  {id:62,artist:"Jimi Hendrix",title:"Hendrix High Live and Dirty",year:1978,genre:"Classic Rock",shelf:"E",condition:cond(5)},
+  {id:62,artist:"Jimi Hendrix",title:"High, Live 'n' Dirty",year:1978,genre:"Classic Rock",shelf:"E",condition:cond(5)},
   {id:63,artist:"Jimi Hendrix",title:"Smash Hits",year:1969,genre:"Classic Rock",shelf:"E",condition:cond(6)},
   {id:64,artist:"Joe Cocker",title:"Greatest Hits",year:1987,genre:"Classic Rock",shelf:"E",condition:cond(0)},
   {id:65,artist:"John Cougar Mellencamp",title:"Uh-Huh",year:1983,genre:"Classic Rock",shelf:"E",condition:cond(1)},
@@ -1633,7 +1659,7 @@ function closeAutocomplete(dropId){const d=document.getElementById(dropId);if(d)
 function buildAcDropdown(dropEl,results,onSelect,mode="crate"){
   if(!results||!results.length){dropEl.classList.remove("open");return}
   dropEl.innerHTML=results.map((item,i)=>{
-    const isDup=mode==="crate"&&albumExistsInCrate(item.artistName||"",item.collectionName||"");
+    const isDup=albumExistsInCrate(item.artistName||"",item.collectionName||"");
     const badge=isDup?`<span class="ac-action" style="color:var(--gold)">✓ in crate</span>`:`<span class="ac-action">＋ ${mode==="want"?"Wish":"Add"}</span>`;
     return `<div class="ac-row" data-idx="${i}">\
 <img class="ac-thumb" src="${item.artworkUrl60||''}" alt="">\
@@ -1668,7 +1694,7 @@ const addDebounce=debounce(async(q)=>{
 document.getElementById("addSearchInput").addEventListener("input",e=>addDebounce(e.target.value.trim()));
 document.getElementById("addSearchInput").addEventListener("blur",()=>setTimeout(()=>closeAutocomplete("addAutoDropdown"),200));
 
-function normalizeStr(s){return s.toLowerCase().trim().replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim()}
+function normalizeStr(s){return s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim().replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim()}
 function albumExistsInCrate(artist,title){
   const na=normalizeStr(artist),nt=normalizeStr(title);
   return vinylCollection.some(a=>normalizeStr(a.artist)===na&&normalizeStr(a.title)===nt);
