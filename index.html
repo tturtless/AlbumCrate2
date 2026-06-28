@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=600">
 <title>The Crate — Vinyl Collection</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -21,7 +21,8 @@
   .logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--gold);letter-spacing:.04em;white-space:nowrap;flex-shrink:0}
   .logo span{color:var(--cream-dim);font-style:italic;font-weight:400;font-size:13px;margin-left:8px;letter-spacing:.08em}
   .header-search{flex:1;max-width:380px;position:relative}
-  .header-search input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--cream);font-family:'Inter',sans-serif;font-size:13px;padding:8px 36px 8px 14px;outline:none;transition:border-color .2s}
+  .header-search input{-webkit-appearance:none;appearance:none;width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--cream);font-family:'Inter',sans-serif;font-size:13px;padding:8px 36px 8px 14px;outline:none;transition:border-color .2s}
+  .header-search input::-webkit-search-decoration,.header-search input::-webkit-search-cancel-button,.header-search input::-webkit-search-results-button,.header-search input::-webkit-search-results-decoration{display:none}
   .header-search input::placeholder{color:var(--cream-dim)}
   .header-search input:focus{border-color:var(--gold-dim)}
   .header-search .search-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--cream-dim);font-size:14px;pointer-events:none}
@@ -316,19 +317,39 @@
   @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
   /* RESPONSIVE */
-  @media(max-width:640px){
-    .site-header{gap:8px;padding:0 12px}
+  /* At viewport width=600, this breakpoint always fires on mobile */
+  @media(max-width:620px){
+    /* Header: compact but keep all labels */
+    .site-header{gap:6px;padding:0 10px;height:56px;flex-wrap:nowrap}
+    .logo{font-size:16px;flex-shrink:0}
     .logo span{display:none}
-    .spin-btn{padding:8px 10px;font-size:11px}
-    .add-album-btn span:last-child,.want-list-btn span:last-child{display:none}
-    .add-album-btn,.want-list-btn{padding:8px 10px}
-    .filter-bar{padding:10px 12px}
-    .grid{padding:12px 12px 48px;gap:12px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+    .header-search{max-width:120px;flex-shrink:1;min-width:60px}
+    .header-search input{font-size:11px;padding:6px 28px 6px 8px}
+    .header-actions{gap:4px;flex-shrink:0}
+    .stats-btn,.want-list-btn,.add-album-btn{
+      padding:6px 7px;font-size:10px;gap:3px
+    }
+    .spin-btn{padding:6px 8px;font-size:11px}
+    /* Filter bar */
+    .filter-bar{padding:7px 10px;gap:5px;flex-wrap:nowrap;overflow-x:auto}
+    .filter-label{display:none}
+    .filter-select{font-size:11px;padding:5px 20px 5px 8px}
+    .fav-filter-btn{font-size:11px;padding:5px 8px}
+    .sort-group{margin-left:auto;flex-shrink:0}
+    .sort-btn{font-size:10px;padding:5px 9px}
+    /* 3-column grid */
+    .grid{padding:8px 8px 48px;gap:7px;grid-template-columns:repeat(3,1fr)}
+    .card-body{padding:6px 7px 8px}
+    .card-artist{font-size:8px;margin-bottom:1px}
+    .card-title{font-size:11px;margin-bottom:3px}
+    .card-meta{font-size:9px;gap:4px}
+    .card-genre-tag{font-size:7px;padding:1px 4px}
+    /* Detail modal */
     .detail-modal-header{grid-template-columns:1fr}
     .detail-art-wrap{border-radius:6px 6px 0 0;aspect-ratio:16/9;max-height:200px}
     .form-row{grid-template-columns:1fr}
   }
-  @media(max-width:400px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:400px){.grid{grid-template-columns:repeat(3,1fr)}}
   button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
   @media(prefers-reduced-motion:reduce){.card,.vinyl-spinning,.vinyl-slowing{animation:none;transition:none}}
 </style>
@@ -337,14 +358,14 @@
 
 <!-- HEADER -->
 <header class="site-header">
-  <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="cursor:pointer" title="Back to top">THE CRATE <span>Vinyl Collection</span></div>
+  <div class="logo" id="logoBtn" style="cursor:pointer" title="Back to top">THE CRATE <span>Vinyl Collection</span></div>
   <div class="header-search">
     <input type="search" id="searchInput" placeholder="Search artist or title…" autocomplete="off">
     <span class="search-icon">⌕</span>
   </div>
   <div class="header-actions">
-    <button class="want-list-btn" id="wantListBtn"><span>🎯</span><span>Wish List</span></button>
     <button class="stats-btn" id="statsBtn"><span>📊</span><span>Stash Facts</span></button>
+    <button class="want-list-btn" id="wantListBtn"><span>🎯</span><span>Wish List</span></button>
     <button class="add-album-btn" id="addAlbumBtn"><span style="font-size:16px;line-height:1">＋</span><span>Add to Crate</span></button>
     <button class="spin-btn" id="spinBtn">🎲 Spin</button>
   </div>
@@ -466,6 +487,11 @@
     </div>
     <div class="tab-panel" id="tab-about">
       <div id="aboutContainer"></div>
+    </div>
+    <div style="padding:14px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end">
+      <button id="detailDeleteBtn" onclick="deleteAlbumFromModal()" style="background:none;border:1px solid var(--red-bright);border-radius:3px;color:var(--red-bright);font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.06em;padding:7px 14px;cursor:pointer;transition:background .15s,color .15s;display:flex;align-items:center;gap:6px">
+        <span style="font-size:13px">🗑</span> Remove from Crate
+      </button>
     </div>
   </div>
 </div>
@@ -589,17 +615,81 @@ const GENRE_IMAGES = {
 };
 function getPlaceholder(genre){return GENRE_IMAGES[genre]||GENRE_IMAGES["default"]}
 
+// ── DISCOGS COVER OVERRIDES ──
+// Hand-curated covers for albums iTunes can't match correctly.
+// Key format: "artist|title" (lowercase). Add more as needed.
+const DISCOGS_COVERS = {
+  "jimi hendrix|high, live 'n' dirty": "https://i.discogs.com/PAkQRY4lUTwv0MUdWbJPlWNnUBIzoEuJMvQqTjAUz20/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTIzNTI4/OTMtMTI3OTgzNjc5/My5qcGVn.jpeg",
+  "chicago|chicago": "https://i.discogs.com/8QwLQmNysF7JaxHxv0ii-at-R2kKTkQmLpRk9_IIYHQ/rs:fit/g:sm/q:90/h:600/w:587/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTQ0ODc1/OS0xNjQwNjEwODQ3/LTUzMjEuanBlZw.jpeg",
+  "chicago|chicago greatest hits 9": "https://i.discogs.com/mw2pGhqCFqVGxubH-8O6w7FKKMjkrtRlG8fbNP0P0TY/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTcwOTQ4/NC0xMzY1Mzc0NjU3/LTQzMzAuanBlZw.jpeg",
+  "cruisin|5 lp set": "https://i.discogs.com/3_5zxpzdvIa7D89hhiosXMXWrx2McvNwWlnhaETQnVc/rs:fit/g:sm/q:90/h:600/w:595/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTU0MjY3/ODYtMTM5MzA4NTQ5/Ny01OTE3LmpwZWc.jpeg",
+  "eddie and the cruisers|soundtrack": "https://i.discogs.com/sdx8LeyYqeRcU5qd0-oVwvflm8DasQBqlw2z0tpvBks/rs:fit/g:sm/q:90/h:585/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTk2OTkx/Ny0xNTg4NDA5ODky/LTUyMTcuanBlZw.jpeg",
+  "eddie and the cruisers|soundtrack (alt press)": "https://i.discogs.com/sdx8LeyYqeRcU5qd0-oVwvflm8DasQBqlw2z0tpvBks/rs:fit/g:sm/q:90/h:585/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTk2OTkx/Ny0xNTg4NDA5ODky/LTUyMTcuanBlZw.jpeg",
+  "electric light orchestra|greatest hits": "https://i.discogs.com/gvAMs4vqQFMkDKDAz6IIQu6QQgDBcZTdTH9oXTZ6A14/rs:fit/g:sm/q:90/h:569/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTM4Nzg0/Mi0xMjkxODU0MDg1/LmpwZWc.jpeg",
+  "elvis presley|double dynamite": "https://i.discogs.com/mNfnucIOIUs9vyJ2Xa-4cPwhsa1YgBMD803nAW07AMI/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTE0MDIy/MDItMTMxMjA3NzM3/OC5qcGVn.jpeg",
+  "elvis presley|elvis the legend lives on": "https://i.discogs.com/ov9P15owNXw4ErYGZ_j1xUwqrliOmL5bM828Gy4IPA0/rs:fit/g:sm/q:90/h:300/w:311/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTM2MjA3/NTQtMTMzNzY4NzY5/OS00MjI5LmpwZWc.jpeg",
+  "elvis presley|gold records volume 5": "https://i.discogs.com/iou6qS5szeY_JF24gHtIWxk7QmPgzqzEWBWWfpOFPpY/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTUxOTY1/NjEtMTQ4NzM2MjQ5/My03MTI3LmpwZWc.jpeg",
+  "foreigner|foreigner": "https://i.discogs.com/oEj74iYxR3jtmswQkEnVrBhRYufUjxjVncNvffQgDkM/rs:fit/g:sm/q:90/h:595/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTc2NDk2/Ni0xNTYzNzM2ODQ2/LTU0MzQuanBlZw.jpeg",
+  "green day|american idiot": "https://i.discogs.com/MZK1NpQQ4V2QYjchCOmpc6aZuYJVjfAWfw9c5cAp6zI/rs:fit/g:sm/q:90/h:596/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTEyMDM0/NzAtMTU3NDI2ODI2/Ni05MDM2LmpwZWc.jpeg",
+  "mose jones|blackbird": "https://i.discogs.com/oYCqUWSfg3-hof6zXo2X3EHAlx952rxCiXXmtu0erDI/rs:fit/g:sm/q:90/h:600/w:595/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTY4MTUy/NjQtMTQyNzIwNjMx/OC0zNjA5LmpwZWc.jpeg",
+  "pearl jam|ten": "https://i.discogs.com/rttPGqFmPw8eqZNCMNE6IpHNcCV22Z-p0DQ5hAL50RI/rs:fit/g:sm/q:90/h:600/w:596/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTExMTE2/NDUxLTE1MTE1Mzk0/MTYtMzkyMi5qcGVn.jpeg",
+  "peter frampton & the bee gees|sgt. pepper's lonely hearts club band": "https://i.discogs.com/ZxClWXCi4c2U1VERxcDf1BZKoW8-1qt-I1PY0iEHbMk/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTExNDAx/MzMzLTE3NzY1MjAy/NzktMjM1MS5qcGVn.jpeg",
+  "pink floyd|animals": "https://i.discogs.com/_hYJ-UiHBq0KtuIlz26o-4Ar82o9589HIFIE5XOXuVU/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTM5MTMy/Mi0xNjkxNTYzMjc4/LTYwODAuanBlZw.jpeg",
+  "pink floyd|the dark side of the moon": "https://i.discogs.com/1fwskTLM6cfxbdNmBDJ8expl6wab0tEgxvuloLIqKh8/rs:fit/g:sm/q:90/h:596/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTkyODc4/MDktMTQ3OTc1MzIz/Ni05NjE3LmpwZWc.jpeg",
+  "the babys|union jacks": "https://i.discogs.com/59xvhuAuOA8gjeG3cW08gu92XPDdoevrzizhxIHtZ9U/rs:fit/g:sm/q:90/h:597/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTc1MzU4/OC0xNTM4MTMyOTQ1/LTYzMTguanBlZw.jpeg",
+  "the cars|the cars": "https://i.discogs.com/mQ4p8rs4QCkWGIUV36RxMK41r3w-paGDsHmPYFZwydA/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTE5MDIx/OS0xMzE5MDU0ODYz/LmpwZWc.jpeg",
+  "the doors|13": "https://i.discogs.com/AsXJXr7HA_M2xcmLFkY4WsxuM-pPr67tPllRXeWQC28/rs:fit/g:sm/q:90/h:590/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTI5MTcx/MzMtMTM2MTMwMDQ1/NS05MjU1LmpwZWc.jpeg",
+};
+
 // ── PERSISTENCE ──
 function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
 
 // ── COVER ART (iTunes) ──
-const CAA_KEY="crate_coverart_cache_v3";
+const CAA_KEY="crate_coverart_cache_v4";
 let caaCache=lsGet(CAA_KEY,{});
 Object.keys(caaCache).forEach(k=>{if(!caaCache[k])delete caaCache[k]});
 function saveCaaCache(){lsSet(CAA_KEY,caaCache)}
 
+// ── COVER SEARCH OVERRIDES ──
+// Some albums need a hand-tuned iTunes search term to find the right cover
+// (self-titled records, compilations, or names iTunes catalogs differently).
+const COVER_QUERY_OVERRIDES = {
+  // Obscure Southern-rock debut — search by full band name + title
+  "mose jones|blackbird":"Mose Jones Blackbird",
+  // UK hits comp — iTunes indexes under "Electric Light Orchestra", accented title varies
+  "electric light orchestra|olé elo":"Electric Light Orchestra Ole ELO",
+  // 1975 Pickwick budget double-LP — keep exact title for best chance
+  "elvis presley|double dynamite":"Elvis Presley Double Dynamite",
+  // Multi-LP budget comp — drop the redundant "Elvis" prefix from the search
+  "elvis presley|elvis the legend lives on":"Elvis Presley Legend Lives On",
+  // Self-titled debut — year disambiguates from later releases
+  "foreigner|foreigner":"Foreigner 1977",
+  // Correct album title is "Shinin' On" (1974) — key updated to match fixed collection entry
+  "grand funk railroad|shinin' on":"Grand Funk Railroad Shinin On 1974",
+  // Widely catalogued — plain query is reliable
+  "green day|american idiot":"Green Day American Idiot",
+  // 1978 Nutmeg budget live LP — approximated for iTunes search
+  "jimi hendrix|high, live 'n' dirty":"Jimi Hendrix High Live Dirty",
+  // 1969 Reprise compilation — straightforward match
+  "jimi hendrix|smash hits":"Jimi Hendrix Smash Hits",
+  // iTunes catalogs this under "John Mellencamp" not "John Cougar Mellencamp"
+  "john cougar mellencamp|uh-huh":"John Mellencamp Uh Huh 1983",
+  "lynyrd skynyrd|give me back my bullets":"Lynyrd Skynyrd Give Me Back My Bullets",
+  "pearl jam|ten":"Pearl Jam Ten",
+  "pink floyd|animals":"Pink Floyd Animals",
+  "pink floyd|the dark side of the moon":"Pink Floyd Dark Side of the Moon",
+  // Drop "The" from artist to catch both "Babys" and "The Babys" iTunes entries
+  "the babys|union jacks":"Babys Union Jacks",
+  // Year disambiguates the debut from later self-titled re-issues
+  "the cars|the cars":"The Cars 1978",
+  // Short title — keep artist anchored in the query
+  "the doors|13":"The Doors 13 1970"
+};
+
 function buildSearchStrategies(artist,title){
+  const overrideKey=(artist+"|"+title).toLowerCase().trim();
+  if(COVER_QUERY_OVERRIDES[overrideKey])return[encodeURIComponent(COVER_QUERY_OVERRIDES[overrideKey])];
   const clean=s=>s.replace(/\([^)]*\)/g,"").replace(/\[[^\]]*\]/g,"").replace(/soundtrack/ig,"").replace(/greatest hits.*$/ig,"greatest hits").replace(/self[- ]titled/ig,"").replace(/vol\.?\s*\d+/ig,"").replace(/[^\w\s&]/g," ").replace(/\s+/g," ").trim();
   const ca=clean(artist.replace(/various artists/ig,"").replace(/^the\s+/i,"").trim());
   const ct=clean(title);
@@ -637,30 +727,55 @@ async function drainCoverQueue(){
   if(failedLookups.size>0&&retryCount<3)scheduleAutoRetry();
 }
 
+// ── COVER NORMALISER ──
+// Strips diacritics (é→e, ü→u, etc.) BEFORE removing non-alphanumeric, so accented
+// titles like "Olé ELO" and plain "Ole ELO" both collapse to the same token.
+function normCover(s){
+  return s.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]/g,'');
+}
+
+// ── ARTIST ALIASES FOR COVER MATCHING ──
+// Maps a normalised artist key to extra normalised names iTunes might use instead.
+// E.g. "John Cougar Mellencamp" was re-catalogued by iTunes as "John Mellencamp".
+const COVER_ARTIST_ALIASES={
+  "johncougarmellencamp":["johnmellencamp","johncougar"],
+};
+
 async function fetchAndApplyCover({img,artist,title,year}){
   const ck=(artist+"|"+title).toLowerCase();
   for(const q of buildSearchStrategies(artist,title)){
     try{
-      const r=await fetch(`https://itunes.apple.com/search?term=${q}&entity=album&limit=10`);
+      const r=await fetch(`https://itunes.apple.com/search?term=${q}&entity=album&limit=15`);
       if(r.ok){
         const d=await r.json();
         if(d.results&&d.results.length){
-          // Try to pick best match: prefer results where title/artist match
-          const normT=title.toLowerCase().replace(/[^a-z0-9]/g,"");
-          const normA=artist.toLowerCase().replace(/[^a-z0-9]/g,"");
-          let best=d.results[0];
+          const normT=normCover(title);
+          const normA=normCover(artist);
+          // Build a list of artist tokens to accept (primary + any known aliases)
+          const artistVariants=[normA,...(COVER_ARTIST_ALIASES[normA]||[])];
+          let bestFull=null,bestArtistOnly=null;
           for(const res of d.results){
-            const rT=(res.collectionName||"").toLowerCase().replace(/[^a-z0-9]/g,"");
-            const rA=(res.artistName||"").toLowerCase().replace(/[^a-z0-9]/g,"");
+            const rT=normCover(res.collectionName||"");
+            const rA=normCover(res.artistName||"");
             const rYear=res.releaseDate?parseInt(res.releaseDate):0;
-            const titleMatch=rT.includes(normT)||normT.includes(rT);
-            const artistMatch=rA.includes(normA)||normA.includes(rA);
-            const yearMatch=year&&Math.abs(rYear-year)<=1;
-            if(titleMatch&&artistMatch&&(yearMatch||!year)){best=res;break}
-            if(titleMatch&&artistMatch){best=res;break}
+            // Artist match: any known alias must overlap with the iTunes artist token
+            const artistMatch=artistVariants.some(a=>
+              rA===a||(a.length>2&&(rA.includes(a)||a.includes(rA))));
+            const titleMatch=rT===normT||(normT.length>2&&(rT.includes(normT)||normT.includes(rT)));
+            const yearMatch=year&&Math.abs(rYear-year)<=2;
+            if(!artistMatch)continue;
+            if(titleMatch&&!bestFull){bestFull=res;if(!year||yearMatch)break}
+            if(!bestArtistOnly)bestArtistOnly=res;
           }
-          const url=(best.artworkUrl100||best.artworkUrl60||"").replace("100x100bb","600x600bb");
-          if(url){caaCache[ck]=url;saveCaaCache();if(document.contains(img))img.src=url;failedLookups.delete(ck);return;}
+          // Only accept a result where the artist genuinely matches — never fall back
+          // to an arbitrary first result, since that produces a confidently-wrong cover.
+          const best=bestFull||bestArtistOnly;
+          if(best){
+            const url=(best.artworkUrl100||best.artworkUrl60||"").replace("100x100bb","600x600bb");
+            if(url){if(!DISCOGS_COVERS[ck]){caaCache[ck]=url;saveCaaCache();}if(document.contains(img))img.src=url;failedLookups.delete(ck);return;}
+          }
         }
       }
     }catch{}
@@ -838,7 +953,7 @@ let vinylCollection=[
   {id:7,artist:"Bad Company",title:"Run with the Pack",year:1976,genre:"Classic Rock",shelf:"A",condition:cond(6)},
   {id:8,artist:"Billy Idol",title:"Rebel Yell",year:1983,genre:"New Wave",shelf:"A",condition:cond(0)},
   {id:9,artist:"Black Sabbath",title:"Paranoid",year:1970,genre:"Heavy Metal",shelf:"A",condition:cond(1)},
-  {id:10,artist:"Blackbird",title:"Moses Jones",year:1975,genre:"Classic Rock",shelf:"A",condition:cond(2)},
+  {id:10,artist:"Mose Jones",title:"Blackbird",year:1975,genre:"Classic Rock",shelf:"A",condition:cond(2)},
   {id:11,artist:"Bob Seger & the Silver Bullet Band",title:"Against the Wind",year:1980,genre:"Classic Rock",shelf:"A",condition:cond(3)},
   {id:12,artist:"Bob Seger & the Silver Bullet Band",title:"Night Moves",year:1976,genre:"Classic Rock",shelf:"A",condition:cond(4)},
   {id:13,artist:"Boston",title:"Boston",year:1976,genre:"Classic Rock",shelf:"B",condition:cond(5)},
@@ -863,7 +978,7 @@ let vinylCollection=[
   {id:32,artist:"Eddie and the Cruisers",title:"Soundtrack",year:1983,genre:"Soundtrack",shelf:"F",condition:cond(3)},
   {id:33,artist:"Eddie and the Cruisers",title:"Soundtrack (Alt Press)",year:1983,genre:"Soundtrack",shelf:"F",condition:cond(4)},
   {id:34,artist:"Electric Light Orchestra",title:"Greatest Hits",year:1979,genre:"Classic Rock",shelf:"C",condition:cond(5)},
-  {id:35,artist:"Electric Light Orchestra",title:"OLELO",year:1981,genre:"Classic Rock",shelf:"C",condition:cond(6)},
+  {id:35,artist:"Electric Light Orchestra",title:"Olé ELO",year:1981,genre:"Classic Rock",shelf:"C",condition:cond(6)},
   {id:36,artist:"Elvis Presley",title:"Double Dynamite",year:1975,genre:"Classic Rock",shelf:"C",condition:cond(0)},
   {id:37,artist:"Elvis Presley",title:"Elvis The Legend Lives On",year:1975,genre:"Classic Rock",shelf:"C",condition:cond(1)},
   {id:38,artist:"Elvis Presley",title:"Gold Records Volume 5",year:1984,genre:"Classic Rock",shelf:"C",condition:cond(2)},
@@ -883,14 +998,14 @@ let vinylCollection=[
   {id:52,artist:"Gordon Lightfoot",title:"If You Could Read My Mind",year:1970,genre:"Singer-Songwriter",shelf:"D",condition:cond(2)},
   {id:53,artist:"Gordon Lightfoot",title:"Old Dan's Records",year:1972,genre:"Singer-Songwriter",shelf:"D",condition:cond(3)},
   {id:54,artist:"Gordon Lightfoot",title:"Sundown",year:1974,genre:"Singer-Songwriter",shelf:"D",condition:cond(4)},
-  {id:55,artist:"Grand Funk",title:"Shine On",year:1974,genre:"Classic Rock",shelf:"D",condition:cond(5)},
+  {id:55,artist:"Grand Funk Railroad",title:"Shine On",year:1974,genre:"Classic Rock",shelf:"D",condition:cond(5)},
   {id:56,artist:"Green Day",title:"American Idiot",year:2004,genre:"Punk / Alternative",shelf:"D",condition:cond(6)},
   {id:57,artist:"Gregory Alan Isakov",title:"The Weatherman",year:2013,genre:"Singer-Songwriter",shelf:"D",condition:cond(0)},
   {id:58,artist:"Hanoi Rocks",title:"Self-Destruction Blues",year:1982,genre:"Hard Rock",shelf:"D",condition:cond(1)},
   {id:59,artist:"Heart",title:"Dreamboat Annie",year:1975,genre:"Classic Rock",shelf:"D",condition:cond(2)},
   {id:60,artist:"Heart",title:"Little Queen",year:1977,genre:"Classic Rock",shelf:"D",condition:cond(3)},
   {id:61,artist:"Iron Butterfly",title:"In-A-Gadda-Da-Vida",year:1968,genre:"Classic Rock",shelf:"E",condition:cond(4)},
-  {id:62,artist:"Jimi Hendrix",title:"Hendrix High Live and Dirty",year:1978,genre:"Classic Rock",shelf:"E",condition:cond(5)},
+  {id:62,artist:"Jimi Hendrix",title:"High, Live 'n' Dirty",year:1978,genre:"Classic Rock",shelf:"E",condition:cond(5)},
   {id:63,artist:"Jimi Hendrix",title:"Smash Hits",year:1969,genre:"Classic Rock",shelf:"E",condition:cond(6)},
   {id:64,artist:"Joe Cocker",title:"Greatest Hits",year:1987,genre:"Classic Rock",shelf:"E",condition:cond(0)},
   {id:65,artist:"John Cougar Mellencamp",title:"Uh-Huh",year:1983,genre:"Classic Rock",shelf:"E",condition:cond(1)},
@@ -1513,37 +1628,263 @@ const ALBUM_FACTS = {
   "various artists|saturday night fever (soundtrack)|1977":{studio:"Various studios — primarily Middle Ear Studios, Miami",producer:"The Bee Gees, Karl Richardson & Albhy Galuten",facts:["Soundtrack to the John Travolta film that defined the disco era","One of the best-selling soundtracks in history — over 40 million copies sold worldwide","The Bee Gees wrote and recorded five original songs for the film in a single week","'Stayin' Alive' and 'Night Fever' both hit #1 in the US — both in the same year","Barry Gibb, Robin Gibb, and Maurice Gibb recorded their vocals in staggered shifts to maintain the energy","The album fundamentally changed the Bee Gees' career — they were seen as a middle-tier act before this; afterward they were superstars"]},
   "various artists|golden christmas favorites|1970":{studio:"Various studios",producer:"Various",facts:["Holiday compilation collecting classic Christmas standards from the golden age of American seasonal recordings","The 1970s saw a boom in budget holiday compilations as labels maximized catalog value at Christmas","Traditional songs like 'White Christmas' and 'O Holy Night' are perennial performers that sustain annual sales decades after recording","The era's production style — lush orchestral arrangements, warm reverb — gave these compilations a comforting, timeless feel","Holiday records occupy a unique place in vinyl culture — they're often found in perfect condition because they were played only one month a year","These compilations were staples of the seasonal gift-giving economy before streaming playlists replaced them"]},
   "cruisin|5 lp set|1970":{studio:"Various studios",producer:"Various",facts:["The Cruisin' series reproduced original radio broadcasts from rock and roll's formative years alongside the hit songs of each year","Each LP in the set recreates a specific year — a time capsule of American Top 40 radio","The sets featured recreated DJ patter from iconic disc jockeys of the era alongside original recordings","One of the most ambitious archival projects in pop history — capturing radio culture as much as music","The series ran from 1955 through the early 1970s, preserving the full arc of rock and roll's rise","A rare collectible — the sets are sought by music historians and vinyl enthusiasts alike"]},
+  "ben howard|burgh island|2017":{studio:"Burgh Island, Devon, England — recorded live on location",producer:"Ben Howard & Aaron Dessner",facts:["Named after and partially recorded on Burgh Island — a tidal island off the south Devon coast accessible only by sea tractor at high tide","The album grew out of a series of intimate live sessions Howard performed on the island itself, blurring the line between studio album and live document","Co-produced with Aaron Dessner of The National, whose fingerprints are all over the sparse, textured arrangements","Howard has spoken about Burgh Island as a place of deep personal significance — the isolation of the island directly shapes the album's mood of solitude and introspection","Released on Island Records, the album marked a sharp departure from the warmth of his debut — darker, more experimental, and far less commercial","The record was recorded in a highly unconventional way — sessions were spread across multiple intimate locations rather than a traditional studio, giving it an unusually raw, spatial quality","'She Treats Me Well' was the lead single — a tender, stripped-back meditation that showed Howard's gift for finding the emotional centre of a relationship in just a few lines","Howard grew up in Devon and the landscape of the south-west of England — its coastline, light, and weather — runs through the album's DNA","The album received widespread critical acclaim in the UK folk and singer-songwriter press, praised for its risk-taking and refusal to repeat the sound that made I Forget Where We Were a success","Burgh Island the place has its own remarkable history — Agatha Christie wrote two novels there and it was a favourite haunt of Edward and Wallis Simpson in the 1930s"]},
+  "ben howard|i forget where we were|2014":{studio:"RAK Studios, London & various locations",producer:"Ben Howard & Chris Bond",facts:["Howard's second studio album — a significant step away from the sun-drenched folk of Every Kingdom toward something more cinematic and melancholic","Debuted at #1 on the UK Albums Chart, cementing Howard as one of Britain's most important singer-songwriters","The title is taken from a line in 'End of the Affair' and captures the album's central theme of dislocation and lost time","Recorded partly at the legendary RAK Studios in London, founded by Mickie Most in the 1970s","'Conrad' and 'I Forget Where We Were' are centrepieces — long, slowly unfolding compositions that show his move toward a more atmospheric, less song-structured approach","Howard has described this album as the product of a difficult personal period — touring relentlessly after Every Kingdom left him creatively exhausted","Produced again with Chris Bond, who had helped shape the warmth of Every Kingdom but pushed here toward more textured, electric territory","Won the Ivor Novello Award for Best Album in 2015","The album's artwork — stark, wintry Devon landscapes — perfectly mirrors the emotional temperature of the music","Every Kingdom had gone platinum in the UK; this follow-up proved Howard wasn't interested in simply repeating that formula"]},
+  "ben howard|every kingdom|2011":{studio:"Real World Studios, Box, Wiltshire & RAK Studios, London",producer:"Ben Howard & Chris Bond",facts:["Debut studio album — recorded partly at Real World Studios in Wiltshire, the studio complex founded by Peter Gabriel","Won the Brit Award for Best British Male Solo Artist and Best British Breakthrough Act in 2012","'Old Pine' has become one of the defining songs of the early 2010s British folk revival — its imagery of Devon summers is strikingly vivid","Howard learned guitar in his bedroom in Devon and was busking in Exeter before being signed to Island Records","Produced with Chris Bond, the two built the album's sound around Howard's acoustic guitar and warm, open-tuning fingerpicking style","The album went platinum in the UK and Ireland, driven almost entirely by word of mouth and live reputation rather than radio play","'Keep Your Head Up' was the lead single — a song Howard has said was written for a friend going through a dark period","Howard was heavily influenced by the early Cat Stevens records and the storytelling simplicity of Neil Young","Every Kingdom captures a very specific feeling of young adulthood in rural England — space, friendship, summers that feel infinite","The album took several years to make properly — Howard refused to rush it despite label pressure, and the patience shows in its coherence"]},
 };
 
 
-function buildAboutTab(id){
-  const a=vinylCollection.find(x=>x.id===id);
-  const container=document.getElementById("aboutContainer");
-  if(!a){container.innerHTML="<p style='color:var(--cream-dim);font-size:13px;padding:8px'>No album selected.</p>";return}
+// ── ALBUM AUTO-FILL (Wikipedia + MusicBrainz) ──
+// Cache keyed by "artist|title" lowercase. Persists to localStorage.
+let mbAboutCache = lsGet("crate_mb_about", {});
+function saveMbAboutCache(){ lsSet("crate_mb_about", mbAboutCache); }
 
-  const key=`${a.artist}|${a.title}|${a.year}`.toLowerCase();
-  const keyNoYear=`${a.artist}|${a.title}`.toLowerCase();
-  const data=ALBUM_FACTS[key]||ALBUM_FACTS[keyNoYear];
+// ── WIKIPEDIA FETCH ──
+// Uses the Wikipedia REST API (free, no key, CORS-open).
+// Returns { intro, sentences[], extract } or null.
+async function fetchWikipediaAlbum(artist, title, year){
+  // Try several search strategies in order
+  const queries = [
+    `${title} ${artist} album`,
+    `${title} album ${year}`,
+    `${title} ${artist}`,
+    `${title} album`,
+  ];
 
-  if(!data){
-    // Generic display for albums not in the database
-    container.innerHTML=`
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <div style="background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:14px">
-          <div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Album Details</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-            <div><div style="font-size:10px;color:var(--cream-dim);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Artist</div><div style="font-family:'Courier Prime',monospace;font-size:13px;color:var(--cream)">${escAttr(a.artist)}</div></div>
-            <div><div style="font-size:10px;color:var(--cream-dim);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Year</div><div style="font-family:'Courier Prime',monospace;font-size:13px;color:var(--cream)">${a.year}</div></div>
-            <div><div style="font-size:10px;color:var(--cream-dim);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Genre</div><div style="font-family:'Courier Prime',monospace;font-size:13px;color:var(--cream)">${escAttr(a.genre)}</div></div>
-            <div><div style="font-size:10px;color:var(--cream-dim);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Decade</div><div style="font-family:'Courier Prime',monospace;font-size:13px;color:var(--cream)">${a.decade}s</div></div>
-          </div>
-        </div>
-        <p style="font-size:12px;color:var(--cream-dim);text-align:center;padding:8px">No detailed info on file for this record yet.</p>
-      </div>`;
-    return;
+  for(const q of queries){
+    try{
+      // Step 1: search for the page
+      const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(q)}&srlimit=5&format=json&origin=*`;
+      const sr = await fetch(searchUrl);
+      if(!sr.ok) continue;
+      const sd = await sr.json();
+      const hits = sd?.query?.search || [];
+      if(!hits.length) continue;
+
+      // Pick the best hit — prefer one whose title contains the album name
+      const normTitle = title.toLowerCase().replace(/[^a-z0-9]/g," ").trim();
+      const normArtist = artist.toLowerCase().replace(/[^a-z0-9]/g," ").trim();
+      let best = hits.find(h => {
+        const ht = h.title.toLowerCase();
+        return ht.includes(normTitle) && (ht.includes("album") || ht.includes(normArtist));
+      }) || hits.find(h => h.title.toLowerCase().includes(normTitle))
+        || hits[0];
+
+      // Step 2: fetch the full extract for that page
+      const pageUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=true&explaintext=true&titles=${encodeURIComponent(best.title)}&format=json&origin=*`;
+      const pr = await fetch(pageUrl);
+      if(!pr.ok) continue;
+      const pd = await pr.json();
+      const pages = pd?.query?.pages || {};
+      const page = Object.values(pages)[0];
+      if(!page || page.missing !== undefined) continue;
+
+      const extract = page.extract || "";
+      if(extract.length < 80) continue; // too short — probably not a real article
+
+      // Sanity check: the extract should mention the artist or title
+      const normExtract = extract.toLowerCase();
+      if(!normExtract.includes(normTitle.split(" ")[0]) && !normExtract.includes(normArtist.split(" ")[0])) continue;
+
+      return { title: best.title, extract };
+    } catch(e){ continue; }
+  }
+  return null;
+}
+
+// ── EXTRACT STRUCTURED FACTS FROM WIKIPEDIA TEXT ──
+function parseWikipediaExtract(extract, artist, title, year){
+  // Split into sentences
+  const rawSentences = extract
+    .replace(/\n+/g, " ")
+    .split(/(?<=[.!?])\s+(?=[A-Z"'(])/)
+    .map(s => s.trim())
+    .filter(s => s.length > 30 && s.length < 400);
+
+  // Score sentences by interest — look for specific signal phrases
+  const INTEREST_PATTERNS = [
+    /\b(recorded|recording|studio|produced|producer|sessions?)\b/i,
+    /\b(released|release date|debut|issued)\b/i,
+    /\b(chart|billboard|uk|#\d|number one|peaked|reached)\b/i,
+    /\b(grammy|award|certif|platinum|gold|million copies)\b/i,
+    /\b(written|composed|lyric|inspired|influence)\b/i,
+    /\b(band|member|lineup|join|left|fired|quit|formed)\b/i,
+    /\b(critic|reception|review|acclaim|praised|call(ed)?)\b/i,
+    /\b(first|original|only|never|last|final|debut)\b/i,
+    /\b(sold|sales|commercial|success|failure|flop)\b/i,
+    /\b(tour|concert|live|perform)\b/i,
+    /\b(\d{4}|\$[\d,.]+|[\d,]+ copies|week[s]?)\b/i,
+  ];
+
+  function scoreS(s){
+    let score = 0;
+    INTEREST_PATTERNS.forEach(p => { if(p.test(s)) score++; });
+    // Penalise very generic openers
+    if(/^The album is /.test(s)) score -= 0.5;
+    if(/^It is /.test(s)) score -= 0.5;
+    return score;
   }
 
-  const factsHtml=data.facts.map(f=>`<li style="padding:5px 0;border-bottom:1px solid rgba(42,42,42,.5);font-size:13px;color:var(--cream);line-height:1.55">${escAttr(f)}</li>`).join("");
+  // Take intro (first 2 sentences always) + top-scored remaining ones
+  const intro = rawSentences.slice(0, 2);
+  const rest  = rawSentences.slice(2);
+  const ranked = rest
+    .map(s => ({ s, score: scoreS(s) }))
+    .filter(x => x.score >= 1)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 5)
+    .map(x => x.s);
+
+  // Deduplicate and combine
+  const all = [...intro, ...ranked];
+  const seen = new Set();
+  const facts = all.filter(s => {
+    const k = s.slice(0, 40);
+    if(seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  }).slice(0, 7);
+
+  return facts.length ? facts : rawSentences.slice(0, 4);
+}
+
+// ── PULL STUDIO / PRODUCER FROM WIKIPEDIA TEXT ──
+function extractRecordingInfo(extract){
+  let studio = "";
+  let producer = "";
+
+  // Studio patterns
+  const studioPatterns = [
+    /recorded at ([A-Z][^,.]{3,50}(?:Studios?|Studio|Sound|Recording|Room)[^,.]*)/i,
+    /at ([A-Z][^,.]{3,50}(?:Studios?|Studio|Sound))[,.\s]/i,
+    /([A-Z][^,.]{3,50}(?:Studios?|Studio))[,\s]+(?:in|located)/i,
+  ];
+  for(const p of studioPatterns){
+    const m = extract.match(p);
+    if(m){ studio = m[1].trim().replace(/\s+/g," "); break; }
+  }
+
+  // Producer patterns
+  const producerPatterns = [
+    /produced by ([A-Z][^,.]{3,60}?)(?:\s+and\s+([A-Z][^,.]{3,40}?))?[,.\s]/i,
+    /production (?:was handled |)by ([A-Z][^,.]{3,60}?)[,.\s]/i,
+    /([A-Z][^,.]{3,40}?) (?:served as |)(?:co-)?produc(?:ed|er|ing)/i,
+  ];
+  for(const p of producerPatterns){
+    const m = extract.match(p);
+    if(m){ producer = m[1].trim().replace(/\s+/g," "); break; }
+  }
+
+  return { studio, producer };
+}
+
+// ── MUSICBRAINZ (label + release country only) ──
+async function fetchMBMeta(artist, title, year){
+  const MB = "https://musicbrainz.org/ws/2";
+  const headers = { "Accept":"application/json", "User-Agent":"TheCrateVinyl/1.0" };
+  try{
+    const q = encodeURIComponent(`release:"${title}" artist:"${artist}"`);
+    const sr = await fetch(`${MB}/release-group?query=${q}&limit=5&fmt=json`, { headers });
+    if(!sr.ok) return null;
+    const sd = await sr.json();
+    const rgs = sd["release-groups"] || [];
+    if(!rgs.length) return null;
+    let rg = rgs[0];
+    if(year){
+      const ym = rgs.find(r => r["first-release-date"]?.startsWith(String(year)));
+      if(ym) rg = ym;
+    }
+    // Get releases for label
+    const rgr = await fetch(`${MB}/release-group/${rg.id}?inc=releases&fmt=json`, { headers });
+    if(!rgr.ok) return { label:"", country:"" };
+    const rgd = await rgr.json();
+    const releases = rgd.releases || [];
+    if(!releases.length) return { label:"", country:"" };
+    const relr = await fetch(`${MB}/release/${releases[0].id}?inc=labels+release-events&fmt=json`, { headers });
+    if(!relr.ok) return { label:"", country:"" };
+    const reld = await relr.json();
+    const label = reld["label-info"]?.[0]?.label?.name || "";
+    const country = reld.country || "";
+    return { label, country };
+  } catch(e){ return null; }
+}
+
+// ── MAIN FETCH ORCHESTRATOR ──
+async function fetchAlbumAbout(artist, title, year){
+  const cacheKey = (artist + "|" + title).toLowerCase();
+  if(mbAboutCache[cacheKey]) return mbAboutCache[cacheKey];
+
+  // Run Wikipedia and MusicBrainz in parallel
+  const [wikiResult, mbMeta] = await Promise.allSettled([
+    fetchWikipediaAlbum(artist, title, year),
+    fetchMBMeta(artist, title, year)
+  ]);
+
+  const wiki = wikiResult.status === "fulfilled" ? wikiResult.value : null;
+  const mb   = mbMeta.status   === "fulfilled" ? mbMeta.value   : null;
+
+  // Build facts from Wikipedia
+  let facts = [];
+  let studio = "";
+  let producer = "";
+  let wikiPageTitle = "";
+
+  if(wiki){
+    wikiPageTitle = wiki.title;
+    const recInfo = extractRecordingInfo(wiki.extract);
+    studio   = recInfo.studio;
+    producer = recInfo.producer;
+    facts    = parseWikipediaExtract(wiki.extract, artist, title, year);
+  }
+
+  // Supplement with MusicBrainz label if we have it
+  const label = mb?.label || "";
+  if(label && !facts.some(f => f.toLowerCase().includes(label.toLowerCase()))){
+    facts.push(`Released on ${label}.`);
+  }
+
+  // Fallback studio/producer from MB country if wiki had nothing
+  if(!studio && mb?.country) studio = mb.country;
+
+  const result = {
+    studio:   studio   || "Information not available",
+    producer: producer || "See liner notes",
+    label:    label,
+    facts:    facts.length ? facts : ["Detailed recording info not available for this release."],
+    wikiTitle: wikiPageTitle,
+    fetched:  true,
+    fetchedAt: Date.now()
+  };
+
+  mbAboutCache[cacheKey] = result;
+  saveMbAboutCache();
+  return result;
+}
+
+// Called after an album is added — pre-fetches data in background
+async function prefetchAboutData(artist, title, year){
+  const cacheKey = (artist + "|" + title).toLowerCase();
+  const hcKey = `${artist}|${title}|${year}`.toLowerCase();
+  const hcKeyNoYear = `${artist}|${title}`.toLowerCase();
+  if(ALBUM_FACTS[hcKey] || ALBUM_FACTS[hcKeyNoYear] || mbAboutCache[cacheKey]) return;
+  fetchAlbumAbout(artist, title, year); // fire and forget
+}
+
+function renderAboutData(container, a, data){
+  const factsHtml = data.facts.map(f=>`<li style="padding:6px 0;border-bottom:1px solid rgba(42,42,42,.5);font-size:13px;color:var(--cream);line-height:1.6">${escAttr(f)}</li>`).join("");
+  const labelRow = data.label ? `
+    <div>
+      <div style="font-size:10px;color:var(--cream-dim);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px">Label</div>
+      <div style="font-size:13px;color:var(--cream);line-height:1.4">${escAttr(data.label)}</div>
+    </div>` : "";
+
+  const sourceTag = data.fetched
+    ? data.wikiTitle
+      ? `<a href="https://en.wikipedia.org/wiki/${encodeURIComponent(data.wikiTitle)}" target="_blank" rel="noopener"
+           style="font-size:9px;color:var(--cream-dim);letter-spacing:.06em;text-decoration:none;border-bottom:1px dotted var(--cream-dim);opacity:.7">
+           Wikipedia ↗</a>`
+      : `<span style="font-size:9px;color:var(--cream-dim);letter-spacing:.06em;opacity:.7">via MusicBrainz</span>`
+    : "";
 
   container.innerHTML=`
     <div style="display:flex;flex-direction:column;gap:14px">
@@ -1558,18 +1899,100 @@ function buildAboutTab(id){
             <div style="font-size:10px;color:var(--cream-dim);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px">Producer</div>
             <div style="font-size:13px;color:var(--cream);line-height:1.4">${escAttr(data.producer)}</div>
           </div>
+          ${labelRow}
         </div>
       </div>
       <div style="background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:14px">
-        <div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:10px">★ Fun Facts & Lore</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">★ Fun Facts & Lore</div>
+          ${sourceTag}
+        </div>
         <ul style="list-style:none;padding:0;margin:0">${factsHtml}</ul>
       </div>
     </div>`;
 }
 
+function buildAboutTab(id){
+  const a=vinylCollection.find(x=>x.id===id);
+  const container=document.getElementById("aboutContainer");
+  if(!a){container.innerHTML="<p style='color:var(--cream-dim);font-size:13px;padding:8px'>No album selected.</p>";return}
+
+  const key=`${a.artist}|${a.title}|${a.year}`.toLowerCase();
+  const keyNoYear=`${a.artist}|${a.title}`.toLowerCase();
+  const hardcoded=ALBUM_FACTS[key]||ALBUM_FACTS[keyNoYear];
+
+  // If hardcoded curator data exists, use it immediately
+  if(hardcoded){ renderAboutData(container, a, hardcoded); return; }
+
+  // Check MusicBrainz cache
+  const cached = mbAboutCache[keyNoYear];
+  if(cached){ renderAboutData(container, a, cached); return; }
+
+  // Show loading state and fetch
+  container.innerHTML=`
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:14px">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Album Details</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div><div style="font-size:10px;color:var(--cream-dim);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Artist</div><div style="font-family:'Courier Prime',monospace;font-size:13px;color:var(--cream)">${escAttr(a.artist)}</div></div>
+          <div><div style="font-size:10px;color:var(--cream-dim);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Year</div><div style="font-family:'Courier Prime',monospace;font-size:13px;color:var(--cream)">${a.year}</div></div>
+          <div><div style="font-size:10px;color:var(--cream-dim);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Genre</div><div style="font-family:'Courier Prime',monospace;font-size:13px;color:var(--cream)">${escAttr(a.genre)}</div></div>
+          <div><div style="font-size:10px;color:var(--cream-dim);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Decade</div><div style="font-family:'Courier Prime',monospace;font-size:13px;color:var(--cream)">${a.decade}s</div></div>
+        </div>
+      </div>
+      <div style="text-align:center;padding:16px;color:var(--cream-dim);font-size:12px" id="mbLoadingMsg">
+        <div style="font-size:20px;margin-bottom:8px">🔍</div>
+        Looking up info on Wikipedia &amp; MusicBrainz…
+      </div>
+    </div>`;
+
+  fetchAlbumAbout(a.artist, a.title, a.year).then(data=>{
+    // Only update if this album is still open
+    if(currentDetailId !== id) return;
+    const stillContainer = document.getElementById("aboutContainer");
+    if(!stillContainer) return;
+    if(data){
+      renderAboutData(stillContainer, a, data);
+    } else {
+      const msg = stillContainer.querySelector("#mbLoadingMsg");
+      if(msg) msg.innerHTML=`<div style="font-size:20px;margin-bottom:8px">📀</div>No detailed info found in the MusicBrainz database for this release. Try adding notes in the Notes tab!`;
+    }
+  });
+}
+
 // Close detail modal
 document.getElementById("detailClose").addEventListener("click",()=>{document.getElementById("detailModal").classList.remove("open");closePhotoMenu();currentDetailId=null});
 document.getElementById("detailModal").addEventListener("click",e=>{if(e.target===document.getElementById("detailModal")){document.getElementById("detailModal").classList.remove("open");closePhotoMenu();currentDetailId=null}});
+
+// Delete from inside the detail modal
+function deleteAlbumFromModal(){
+  if(!currentDetailId)return;
+  const a=vinylCollection.find(x=>x.id===currentDetailId);
+  if(!a)return;
+  if(!confirm(`Remove "${a.title}" from your crate?`))return;
+  document.getElementById("detailModal").classList.remove("open");
+  closePhotoMenu();
+  const id=currentDetailId;
+  currentDetailId=null;
+  deleteAlbum(id);
+}
+
+// Logo — clear all filters/search and snap to top
+document.getElementById("logoBtn").addEventListener("click",()=>{
+  const input=document.getElementById("searchInput");
+  input.value="";
+  state.search="";
+  state.genre="";
+  state.decade="";
+  state.favOnly=false;
+  state.sort="az";
+  document.getElementById("genreFilter").value="";
+  document.getElementById("decadeFilter").value="";
+  document.getElementById("favFilterBtn").classList.remove("active");
+  document.querySelectorAll(".sort-btn").forEach(b=>b.classList.toggle("active",b.dataset.sort==="az"));
+  render();
+  window.scrollTo({top:0,behavior:"smooth"});
+});
 
 // ── SPIN ──
 let spinTimeout=null;
@@ -1633,7 +2056,7 @@ function closeAutocomplete(dropId){const d=document.getElementById(dropId);if(d)
 function buildAcDropdown(dropEl,results,onSelect,mode="crate"){
   if(!results||!results.length){dropEl.classList.remove("open");return}
   dropEl.innerHTML=results.map((item,i)=>{
-    const isDup=mode==="crate"&&albumExistsInCrate(item.artistName||"",item.collectionName||"");
+    const isDup=albumExistsInCrate(item.artistName||"",item.collectionName||"");
     const badge=isDup?`<span class="ac-action" style="color:var(--gold)">✓ in crate</span>`:`<span class="ac-action">＋ ${mode==="want"?"Wish":"Add"}</span>`;
     return `<div class="ac-row" data-idx="${i}">\
 <img class="ac-thumb" src="${item.artworkUrl60||''}" alt="">\
@@ -1668,7 +2091,7 @@ const addDebounce=debounce(async(q)=>{
 document.getElementById("addSearchInput").addEventListener("input",e=>addDebounce(e.target.value.trim()));
 document.getElementById("addSearchInput").addEventListener("blur",()=>setTimeout(()=>closeAutocomplete("addAutoDropdown"),200));
 
-function normalizeStr(s){return s.toLowerCase().trim().replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim()}
+function normalizeStr(s){return s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim().replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim()}
 function albumExistsInCrate(artist,title){
   const na=normalizeStr(artist),nt=normalizeStr(title);
   return vinylCollection.some(a=>normalizeStr(a.artist)===na&&normalizeStr(a.title)===nt);
@@ -1722,6 +2145,7 @@ function addAlbumFromSearch(item,isDuplicate=false){
   document.getElementById("searchResultsList").innerHTML="";
   document.getElementById("addSearchInput").value="";
   showToast(`✓ "${album.title}" added${isDuplicate?" (duplicate copy)":""}`);
+  prefetchAboutData(album.artist, album.title, album.year);
 }
 
 function addManualAlbum(){
@@ -1736,6 +2160,7 @@ function addManualAlbum(){
   document.getElementById("addModal").classList.remove("open");
   ["formArtist","formTitle","formYear"].forEach(id=>document.getElementById(id).value="");
   showToast(`✓ "${title}" added to your crate`);
+  prefetchAboutData(artist, title, year);
 }
 
 // ── WANTLIST ──
@@ -1792,6 +2217,7 @@ function moveWantToCrate(id){
   vinylCollection.push(album);const ua=lsGet("crate_user_albums",[]);ua.push(album);lsSet("crate_user_albums",ua);
   removeWantItem(id);buildFilters();render();
   showToast(`✓ "${album.title}" moved to your crate`);
+  prefetchAboutData(album.artist, album.title, album.year);
 }
 
 function renderWantList(){
@@ -1999,6 +2425,9 @@ function showToast(msg){
 }
 
 // ── INIT ──
+// Always apply Discogs overrides — they win over any cached iTunes URLs
+Object.entries(DISCOGS_COVERS).forEach(([k,url])=>{ caaCache[k]=url; });
+saveCaaCache();
 buildFilters();render();
 </script>
 </body>
